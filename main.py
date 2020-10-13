@@ -259,15 +259,17 @@ def train(loader, model, crit, opt, epoch):
                 'optimizer' : opt.state_dict()
             }, path)
 
-        target = target.cuda(async=True)
+        #target = target.cuda(async=True)
+        #target = target.cuda()
+        #print(target)
         input_var = torch.autograd.Variable(input_tensor.cuda())
-        target_var = torch.autograd.Variable(target)
+        target_var = torch.autograd.Variable(target.cuda())
 
         output = model(input_var)
         loss = crit(output, target_var)
 
         # record loss
-        losses.update(loss.data[0], input_tensor.size(0))
+        losses.update(loss.cpu().data.item(), input_tensor.size(0))
 
         # compute gradient and do SGD step
         opt.zero_grad()

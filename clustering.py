@@ -1,4 +1,4 @@
-# Copyright (c) 2017-present, Facebook, Inc.
+    # Copyright (c) 2017-present, Facebook, Inc.
 # All rights reserved.
 #
 # This source code is licensed under the license found in the
@@ -176,13 +176,15 @@ def run_kmeans(x, nmb_clusters, verbose=False):
     # perform the training
     clus.train(x, index)
     _, I = index.search(x, 1)
-    losses = faiss.vector_to_array(clus.obj)
+    #losses = faiss.vector_to_array(clus.obj)
+    stats = clus.iteration_stats
+    losses = np.array([ stats.at(i).obj for i in range(stats.size()) ])
     if verbose:
         print('k-means loss evolution: {0}'.format(losses))
 
     return [int(n[0]) for n in I], losses[-1]
 
-
+    
 def arrange_clustering(images_lists):
     pseudolabels = []
     image_indexes = []
